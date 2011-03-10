@@ -1,7 +1,7 @@
 MOOTOOLS FLOT
 =============
 
-![Screenshot](http://cl.ly/59VB/Screen_shot_2011-03-10_at_10.59.32_AM.png)
+![Screenshot](http://f.cl.ly/items/323p1i3R1J0o2F1w0n0m/Screen%20shot%202011-03-10%20at%2010.59.32%20AM.png)
 
 This is a direct port of flot from jquery to mootools (+ a few plugins)...
 
