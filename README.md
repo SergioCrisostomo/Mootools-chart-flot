@@ -11,8 +11,8 @@ Documentation can be found here [http://flot.googlecode.com/svn/trunk/API.txt](h
 
 Use at your own RISK. ;) Flot is still teh jank + and i did this port at like 3 am.
 
-OH CRAP... ONE MORE THING
-=========================
+How to Use
+----------
 
 Instead of overloading the dollar (like in jquery), i put flot on a flot namespace...
 
@@ -24,5 +24,6 @@ Instead of overloading the dollar (like in jquery), i put flot on a flot namespa
 
     flot.plot({...});
 
+Everything else about the api should be the same.
 
 <3 @fat
