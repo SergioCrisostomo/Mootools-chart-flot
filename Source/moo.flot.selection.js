@@ -1,6 +1,29 @@
 /*
- * Ported to mootools 1.3 by @fat
- */
+---
+
+script: moo.flot.selection.js
+
+name: flot.selection
+
+description: Original flot selection.js ported from jquery to mootools
+
+license: [ Re-release MIT license 2011, Originally released under the MIT license by IOLA, December 2007.]
+
+authors:
+  - @fat
+  - selection people
+
+requires:
+  - core/1.3: '*'
+  - more
+  - more/utilities/color
+  - moo.flot
+
+provides: [flot.selection]
+
+...
+
+*/
 
 /*
 Flot plugin for selecting regions.

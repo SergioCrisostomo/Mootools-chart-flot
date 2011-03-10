@@ -1,7 +1,28 @@
-/* moo.flot.autoscale.js
- * autoScales y axis based on data available from min and max of x axis on draw.
- * By @fat
- */
+/*
+---
+
+script: moo.flot.autoscale.js
+
+name: flot.autoScale
+
+description: Autoscale the y axis when seting new min/max coords
+
+license: [ Re-release MIT license 2011]
+
+authors:
+  - @fat
+
+requires:
+  - core/1.3: '*'
+  - more
+  - more/utilities/color
+  - moo.flot
+
+provides: [flot.series.autoScale]
+
+...
+
+*/
 
 (function (flot) {
     var options = {

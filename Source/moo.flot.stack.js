@@ -1,6 +1,29 @@
 /*
- * Ported to Mootools 1.3 by @fat
- */
+---
+
+script: moo.flot.stack.js
+
+name: flot.stack
+
+description: Original stack plugin ported to mootools
+
+license: [ Re-release MIT license 2011, Originally released under the MIT license by IOLA, December 2007.]
+
+authors:
+  - @fat
+  - Original stacker people
+
+requires:
+  - core/1.3: '*'
+  - more
+  - more/utilities/color
+  - moo.flot
+
+provides: [flot.series.stack]
+
+...
+
+*/
 
 /*
 Flot plugin for stacking data sets, i.e. putting them on top of each
