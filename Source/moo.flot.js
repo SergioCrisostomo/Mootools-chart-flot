@@ -14,9 +14,11 @@ authors:
   - @fat
 
 requires:
-  - Core
-  - MooTools.More
-  - Mootools.more/utilities/color
+  - core/1.3: '*'
+  - more
+  - more/utilities/color
+
+provides: [flot]
 
 ...
 
