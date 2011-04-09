@@ -26,7 +26,6 @@ provides: [flot]
 
 // the actual Flot code
 var flot = {}; //<-- we use this intead of overloading doll hair.
-
 (function(flot) {
     function Plot(placeholder, data_, options_, plugins) {
 
@@ -441,15 +440,15 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             while (colors.length < neededColors) {
                 var c;
                 if (options.colors.length == i) // check degenerate case
-                    c = 'rgb(' +  new Color([100, 100, 100]) + ')';
+                    c = new Color([100, 100, 100]);
                 else
-                    c = 'rgb(' +  new Color(options.colors[i]) + ')';
+                    c = new Color(options.colors[i]);
 
                 // vary color if needed
                 var sign = variation % 2 == 1 ? -1 : 1;
                 c.setSaturation(1 + sign * Math.ceil(variation / 2) * 0.2)
 
-                colors.push(c);
+                colors.push('rgb(' +  c + ')');
 
                 ++i;
                 if (i >= options.colors.length) {
@@ -628,7 +627,6 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
                 executeHooks(hooks.processDatapoints, [ s, s.datapoints]);
             }
-
             // second pass: find datamax/datamin for auto-scaling
             for (i = 0; i < series.length; ++i) {
                 s = series[i];
@@ -733,10 +731,10 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
             // bind events
             if (options.grid.hoverable)
-                eventHolder.addEvent('mousemove', onMouseMove);
+                placeholder.addEvent('mousemove', onMouseMove);
 
             if (options.grid.clickable)
-                eventHolder.addEvent('click', onClick);
+                placeholder.addEvent('click', onClick);
 
             executeHooks(hooks.bindEvents, [eventHolder]);
         }
@@ -1255,7 +1253,6 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
                 generator = function (axis) {
                     var ticks = [];
-
                     // spew out all possible ticks
                     var start = floorInBase(axis.min, axis.tickSize),
                         i = 0, v = Number.NaN, prev;
@@ -1685,7 +1682,6 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                         x2 = (axisy.min - y1) / (y2 - y1) * (x2 - x1) + x1;
                         y2 = axisy.min;
                     }
-
                     // clip with ymax
                     if (y1 >= y2 && y1 > axisy.max) {
                         if (y2 > axisy.max)
