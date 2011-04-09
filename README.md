@@ -9,7 +9,7 @@ Everything is as originally wrote in v 0.6 (execept now runs on mootools).
 
 Documentation can be found here [http://flot.googlecode.com/svn/trunk/API.txt](http://flot.googlecode.com/svn/trunk/API.txt)
 
-Use at your own RISK. ;) Flot is still teh jank + and i did this port at like 3 am.
+You can check a working example here: http://jsfiddle.net/gWSnN/5/
 
 How to Use
 ----------
@@ -19,7 +19,7 @@ Instead of overloading the dollar (like in jquery), i put flot on a flot namespa
     // So this...
 
     $.plot({...});
-   
+
     // Becomes
 
     flot.plot({...});
