@@ -9,13 +9,14 @@ Everything is as originally wrote in v 0.6 (execept now runs on mootools).
 
 Documentation can be found here [http://flot.googlecode.com/svn/trunk/API.txt](http://flot.googlecode.com/svn/trunk/API.txt)
 
-You can check a working example here: http://jsfiddle.net/gWSnN/5/
+**You can check a working example here:** http://jsfiddle.net/8A8HU/
 
 Contributers for the Mootools life of FLOT
 ----------
 
-@fat
+@fat   
 @SergioCrisostomo
+
 
 
 How to use with Mootools
