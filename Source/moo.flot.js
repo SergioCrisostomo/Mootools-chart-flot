@@ -2,26 +2,20 @@
 ---
 
 script: moo.flot.js
-
 name: flot
-
 description: The base flot library ported to work with mootools.
-
 license: [ Re-release MIT license 2011, Originally released under the MIT license by IOLA, December 2007.]
-
 authors:
   - Originial Flot Peeps
   - @fat
+  - @SergioCrisostomo
 
 requires:
   - core/1.3: '*'
   - more
   - more/utilities/color
-
 provides: [flot]
-
 ...
-
 */
 
 // the actual Flot code
@@ -2298,7 +2292,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 item.pageX = parseInt(item.series.xaxis.p2c(item.datapoint[0]) + offset.left + plotOffset.left);
                 item.pageY = parseInt(item.series.yaxis.p2c(item.datapoint[1]) + offset.top + plotOffset.top);
             }
-
+			
             if (options.grid.autoHighlight) {
                 // clear auto-highlights
                 for (var i = 0; i < highlights.length; ++i) {
@@ -2311,8 +2305,22 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 if (item)
                     highlight(item.series, item.datapoint, eventname);
             }
-
-            placeholder.fireEvent(eventname, [ event, pos, item ]);
+			
+			// check if x axis is number or date to show tip-tool as date instead of timestamp
+			if(options.xaxis.mode === "time") {			
+			
+				var datedItem = Object.clone(item);				// clone object
+			    var df = new Date(datedItem.datapoint[0]);
+				var dfDay = df.getDate();
+				var dfMonth = df.getMonth() + 1;		 		// +1 because months are zero based
+				var dfYear = df.getFullYear();
+				var dateFormated = dfYear + "-" + dfMonth + "-" + dfDay;
+				datedItem.datapoint[0] = dateFormated;
+				placeholder.fireEvent(eventname, [ event, pos, datedItem]);
+			} else{
+			
+				placeholder.fireEvent(eventname, [ event, pos, item]);
+			}			
         }
 
         function triggerRedrawOverlay() {
