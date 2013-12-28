@@ -9,7 +9,7 @@ Everything is as originally wrote in v 0.6 (execept now runs on mootools).
 
 Documentation can be found here [http://flot.googlecode.com/svn/trunk/API.txt](http://flot.googlecode.com/svn/trunk/API.txt)
 
-**You can check a working example here:** http://jsfiddle.net/8A8HU/
+**You can check a working example here:** http://jsfiddle.net/Dr5aE/
 
 Contributers for the Mootools life of FLOT
 ----------
