@@ -530,7 +530,7 @@ this:
 		timeformat: "%y/%m/%d"
 	}
 	
-*Example:* http://jsfiddle.net/ZQ2F7/
+*Example:* http://jsfiddle.net/4kbYR/
   
 This will result in tick labels like "2000/12/24". The following
 specifiers are supported
