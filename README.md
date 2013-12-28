@@ -526,9 +526,11 @@ Here "timeformat" is a format string to use. You might use it like
 this:
 
 	xaxis: {
-		mode: "time"
+		mode: "time",
 		timeformat: "%y/%m/%d"
 	}
+	
+*Example:* http://jsfiddle.net/ZQ2F7/
   
 This will result in tick labels like "2000/12/24". The following
 specifiers are supported
