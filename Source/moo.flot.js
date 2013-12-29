@@ -27,12 +27,13 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             options = {
                 // the color theme used for graphs
                 colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"],
+                timeZoneCorrect: true,	// correct timezone
                 legend: {
                     show: true,
                     noColumns: 1, // number of colums in legend table
                     labelFormatter: null, // fn: string -> string
                     labelBoxBorderColor: "#ccc", // border color for the little label boxes
-                    container: null, // container (as jQuery object) to put legend in, null means default on top of graph
+                    container: null, // container (DOM object) to put legend in, null means default on top of graph
                     position: "ne", // position of default legend container within plot
                     margin: 5, // distance from grid edge to default legend container within plot
                     backgroundColor: null, // null means auto-detect
@@ -40,7 +41,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 },
                 xaxis: {
                     position: "bottom", // or "top"
-                    mode: null, // null or "time"
+                    mode: null, // null, "time"
                     color: null, // base color, labels, ticks
                     tickColor: null, // possibly different color of ticks, e.g. "rgba(0,0,0,0.15)"
                     transform: null, // null or f: number -> number to transform axis
@@ -60,7 +61,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     tickSize: null, // number or [number, "unit"]
                     minTickSize: null, // number or [number, "unit"]
                     monthNames: null, // list of names of months
-                    timeformat: null, // format string to use
+                    timeformat: null, // format string to use: "%h:%M", "%h/%i/%d" or other (check docs)
                     twelveHourClock: false // 12 or 24 time in time mode
                 },
                 yaxis: {
@@ -1180,8 +1181,13 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 };
 
                 formatter = function (v, axis) {
+					
                     var d = new Date(v);
-
+                                        
+                    // correct Timezone
+                    if (options.timeZoneCorrect)
+                        d = fixTimeZone(d);
+					
                     // first check global format
                     if (opts.timeformat != null)
                         return flot.plot.formatDate(d, opts.timeformat, opts.monthNames);
@@ -2133,7 +2139,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             if (fragments.length == 0)
                 return;
 
-            var table = '<table style="font-size:smaller;color:' + options.grid.color + '">' + fragments.join("") + '</table>';
+            var table = '<table style="width:auto;font-size:smaller;color:' + options.grid.color + '">' + fragments.join("") + '</table>';
             if (options.legend.container != null)
                 options.legend.container.set('html', table);
             else {
@@ -2306,21 +2312,22 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     highlight(item.series, item.datapoint, eventname);
             }
 			
-			// check if x axis is number or date to show tip-tool as date instead of timestamp
-			if(options.xaxis.mode === "time") {			
-			
-				var datedItem = Object.clone(item);				// clone object
-			    var df = new Date(datedItem.datapoint[0]);
-				var dfDay = df.getDate();
-				var dfMonth = df.getMonth() + 1;		 		// +1 because months are zero based
-				var dfYear = df.getFullYear();
-				var dateFormated = dfYear + "-" + dfMonth + "-" + dfDay;
-				datedItem.datapoint[0] = dateFormated;
-				placeholder.fireEvent(eventname, [ event, pos, datedItem]);
-			} else{
-			
-				placeholder.fireEvent(eventname, [ event, pos, item]);
-			}			
+            // check if x axis is number or date to show tip-tool as date instead of timestamp
+            if(options.xaxis.timeformat != null) {	
+
+                var datedItem = Object.clone(item);				// clone object
+                var dateUnformated  = new Date(datedItem.datapoint[0]);
+                    
+                // correct Timezone
+                if (options.timeZoneCorrect)
+                    dateUnformated = fixTimeZone(dateUnformated);
+                
+                datedItem.datapoint[0] = flot.plot.formatDate(dateUnformated, options.xaxis.timeformat);
+                placeholder.fireEvent(eventname, [ event, pos, datedItem]);
+            } else{
+
+                placeholder.fireEvent(eventname, [ event, pos, item]);
+            }			
         }
 
         function triggerRedrawOverlay() {
@@ -2450,6 +2457,11 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 return gradient;
             }
         }
+		
+        function fixTimeZone(inputDate){
+            var dateDiff = inputDate.getTime() + (inputDate.getTimezoneOffset() * -60000);
+            return new Date(dateDiff);
+        }
     }
 
     flot.plot = function(placeholder, data, options) {
@@ -2463,6 +2475,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
     // returns a string with the date d formatted according to fmt
     flot.plot.formatDate = function(d, fmt, monthNames) {
+		
         var leftPad = function(n) {
             n = "" + n;
             return n.length == 1 ? "0" + n : n;
