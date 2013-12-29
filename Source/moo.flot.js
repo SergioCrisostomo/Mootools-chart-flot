@@ -2311,13 +2311,13 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 if (item)
                     highlight(item.series, item.datapoint, eventname);
             }
-			
+
             // check if x axis is number or date to show tip-tool as date instead of timestamp
-            if(options.xaxis.timeformat != null) {	
+            if(options.xaxis.timeformat != null && item != null) {	
 
                 var datedItem = Object.clone(item);				// clone object
                 var dateUnformated  = new Date(datedItem.datapoint[0]);
-                    
+                  
                 // correct Timezone
                 if (options.timeZoneCorrect)
                     dateUnformated = fixTimeZone(dateUnformated);
