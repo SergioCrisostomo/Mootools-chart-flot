@@ -84,7 +84,7 @@
         }
 
         function calculPixel2XWidthConvert(plot){
-            var gridDimSize = isHorizontal ? plot.getPlaceholder().innerHeight() : plot.getPlaceholder().innerWidth();
+            var gridDimSize = isHorizontal ? plot.getPlaceholder().getSize().y : plot.getPlaceholder().getSize().x;
             var minMaxValues = isHorizontal ? getAxeMinMaxValues(plot.getData(),1) : getAxeMinMaxValues(plot.getData(),0);
             var AxeSize = minMaxValues[1] - minMaxValues[0];
             pixelInXWidthEquivalent = AxeSize / gridDimSize;
