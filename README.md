@@ -561,7 +561,7 @@ will use 12 hour AM/PM timestamps instead of 24 hour.
 The format string and month names are used by a very simple built-in
 format function that takes a date object, a format string (and
 optionally an array of month names) and returns the formatted string.
-If needed, you can access it as $.plot.formatDate(date, formatstring,
+If needed, you can access it as flot.plot.formatDate(date, formatstring,
 monthNames) or even replace it with another more advanced function
 from a date library if you're feeling adventurous.
 
@@ -1248,8 +1248,8 @@ Javascript minifier such as YUI Compressor.
 
 Here's a brief explanation of how the plugin plumbings work:
 
-Each plugin registers itself in the global array $.plot.plugins. When
-you make a new plot object with $.plot, Flot goes through this array
+Each plugin registers itself in the global array flot.plot.plugins. When
+you make a new plot object with flot.plot, Flot goes through this array
 calling the "init" function of each plugin and merging default options
 from the "option" attribute of the plugin. The init function gets a
 reference to the plot object created and uses this to register hooks
