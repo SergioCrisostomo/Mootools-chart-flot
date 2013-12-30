@@ -12,7 +12,7 @@ requires:
   - core/1.3: '*'
   - more
   - more/utilities/color
-provides: [flot]
+provides: [mooflot]
 ...
 */
 

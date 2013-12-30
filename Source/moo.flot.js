@@ -2,7 +2,7 @@
 ---
 
 script: moo.flot.js
-name: flot
+name: mooflot
 description: The base flot library ported to work with mootools.
 license: [ Re-release MIT license 2011, Originally released under the MIT license by IOLA, December 2007.]
 authors:
@@ -14,7 +14,7 @@ requires:
   - core/1.3: '*'
   - more
   - more/utilities/color
-provides: [flot]
+provides: [mooflot]
 ...
 */
 
