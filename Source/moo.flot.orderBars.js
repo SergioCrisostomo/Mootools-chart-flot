@@ -1,4 +1,23 @@
 /*
+---
+script: moo.flot.orderBars.js
+name: flot order bars plugin
+description: Flot plugin to order bars side by side
+license: [ Re-release MIT license 2011, Originally released under the MIT license by IOLA, December 2007.]
+authors:
+  - Benjamin BUFFET
+  - Steven Hall
+
+requires:
+  - core/1.3: '*'
+  - more
+  - more/utilities/color
+provides: [flot]
+...
+*/
+
+
+/*
  * Flot plugin to order bars side by side.
  *
  * Released under the MIT license by Benjamin BUFFET, 20-Sep-2010.
