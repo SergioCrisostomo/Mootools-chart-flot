@@ -19,7 +19,7 @@ Contributers for the Mootools life of FLOT
 
 
 
-How to use with Mootools
+How to use
 ----------
 
 Instead of overloading the dollar (like in jquery), i put flot on a flot namespace...
