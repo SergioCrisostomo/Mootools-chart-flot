@@ -2273,7 +2273,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             }
 
             if (items.length) {
-                return options.xaxis.multipleSeriesEvent ? items : items[0];
+                return items;
             }
             
             return null;
@@ -2350,7 +2350,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             }
             
             function controlArray(itm){
-                if (itm.length === 1 && !options.xaxis.multipleSeriesEvent) return itm[0];
+                if (eventname === 'plotclick') return itm[0];
                 if(itm.length) return itm;
                 return null;
             }

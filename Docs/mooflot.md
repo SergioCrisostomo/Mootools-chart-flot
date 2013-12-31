@@ -493,7 +493,7 @@ this:
 		timeformat: "%y/%m/%d"
 	}
 	
-*Example:* http://jsfiddle.net/4kbYR/
+*Example:* http://jsfiddle.net/em46z/
   
 This will result in tick labels like "2000/12/24". The following
 specifiers are supported
@@ -755,26 +755,28 @@ mouse move events on the plot area and fire a "plothover" event with
 the same parameters as the "plotclick" event. If "autoHighlight" is
 true (the default), nearby data items are highlighted automatically.
 If needed, you can disable highlighting and control it yourself with
-the highlight/unhighlight plot methods described elsewhere.
+the highlight/unhighlight plot methods described elsewhere. 
+
+- **Note** that since version 0.6.2 the `plothover` event function for passes a array 
+of objects in `items`, instead of a single object.
 
 You can use "plotclick" and "plothover" events like this:
 
 	flot.plot(document.id("placeholder"), [ d ], { grid: { clickable: true } });
 
-	document.id('placeholder').addEvent('plotclick', function (event, pos, item) {
+	document.id('placeholder').addEvent('plotclick', function (event, pos, items) {
 		alert("You clicked at " + pos.x + ", " + pos.y);
 		// axis coordinates for other axes, if present, are in pos.x2, pos.x3, ...
 		// if you need global screen coordinates, they are pos.pageX, pos.pageY
 
-		if (item) {
-		  highlight(item.series, item.datapoint);
+		if (items) {
 		  alert("You clicked a point!");
 		}
 	});
 
-The item object in this example is either null or a nearby object on the form:
+The items object array in this example is either null or a nearby object on the form:
 
-	item: {
+	object: {
 		datapoint: the point, e.g. [0, 2]
 		dataIndex: the index of the point in the data array
 		series: the series object
@@ -1200,10 +1202,8 @@ hooks in the plugins bundled with Flot.
 AddOns options
 -------
 
-    multipleSeriesEvent // defaults to null 
-    // true or null - Enable auto selection of multiple points on 
-    // same x Axis point, in different series
-
+    swipeLine // defaults to null 
+    // true or null - Swipe line over y (from top to bottom) following the mouse movement
    
 Plugins
 -------
