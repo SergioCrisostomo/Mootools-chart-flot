@@ -1197,6 +1197,13 @@ hooks in the plugins bundled with Flot.
    add a callback to clean up after you. Take a look at the section in
    PLUGINS.txt for more info.
 
+AddOns options
+-------
+
+    multipleSeriesEvent // defaults to null 
+    // true or null - Enable auto selection of multiple points on 
+    // same x Axis point, in different series
+
    
 Plugins
 -------
