@@ -63,7 +63,8 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     monthNames: null, // list of names of months
                     timeformat: null, // format string to use: "%h:%M", "%h/%i/%d" or other (check docs)
                     twelveHourClock: false, // 12 or 24 time in time mode
-                    multipleSeriesEvent: null // true or null - Swipe axis when using events to get data
+                    multipleSeriesEvent: null, // true or null - Swipe axis when using events to get data
+                    swipeLine: null, // true or null - Swipe line over y
                 },
                 yaxis: {
                     autoscaleMargin: 0.02,
@@ -2193,6 +2194,8 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 smallestDistance = maxDistance * maxDistance + 1,
                 foundPoint = false, i, j;
                 
+            if (options.xaxis.swipeLine) drawSwipeLine(mouseX);
+            
             var items = [];
             for (var i = 0; i < series.length; i++) {
             var item = null;
@@ -2271,7 +2274,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     items.push(thisObject);
                 }
             }
-
+ 
             if (items.length) {
                 return options.xaxis.multipleSeriesEvent ? items : items[0];
             }
@@ -2384,7 +2387,20 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
             executeHooks(hooks.drawOverlay, [octx]);
         }
-
+        
+        function drawSwipeLine(mouseX){
+            draw();
+            ctx.beginPath();
+            var l = plot.offset().left;
+            var t = plot.offset().top;
+            var w = plot.height() + t;
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'grey';
+            ctx.moveTo(mouseX + l, t);
+            ctx.lineTo(mouseX + l, w);
+            ctx.closePath();
+            ctx.stroke();
+        }
         function highlight(s, point, auto) {
             if (typeof s == "number")
                 s = series[s];
