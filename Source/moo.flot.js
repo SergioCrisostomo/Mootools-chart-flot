@@ -2314,7 +2314,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     
             var nearbyItems = findNearbyItem(canvasX, canvasY, seriesFilter);
             if (nearbyItems) {
-                items.push(nearbyItems);
+                items = nearbyItems;
             }
             
             if (items) {
@@ -2358,13 +2358,12 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     // get nearest point to clicked item using canvasX, canvasY
                     var positionArray = []; // [ y pos, array index ]
                     for(var m = 0; m < itm.length; m++){
-                        positionArray.push([itm[m], m]);
+                        positionArray.push([Math.abs(canvasY -itm[m].pageY), m]);
                     }
-                    itm = itm.sort(function(a, b) {
+                    positionArray = positionArray.sort(function(a, b) {
                         return a[0] - b[0];
                     });
-
-                    return itm[0];
+                    return itm[positionArray[0][1]];
                 }
                 if(itm.length) return itm;
                 return null;
