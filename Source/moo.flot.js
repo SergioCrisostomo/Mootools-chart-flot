@@ -63,7 +63,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     monthNames: null, // list of names of months
                     timeformat: null, // format string to use: "%h:%M", "%h/%i/%d" or other (check docs)
                     twelveHourClock: false, // 12 or 24 time in time mode
-                    multipleSeriesEvent: null, // true or null - Swipe axis when using events to get data
+                    multipleSeriesEvent: null, // true or null - select multiple points on same x point in different series
                     swipeLine: null, // true or null - Swipe line over y
                 },
                 yaxis: {

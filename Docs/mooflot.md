@@ -1202,6 +1202,10 @@ hooks in the plugins bundled with Flot.
 AddOns options
 -------
 
+    multipleSeriesEvent // defaults to null 
+    // true or null - Allows to select multiple points on same x point
+    // in different series
+    
     swipeLine // defaults to null 
     // true or null - Swipe line over y (from top to bottom) following the mouse movement
    
