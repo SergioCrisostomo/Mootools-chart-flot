@@ -2191,10 +2191,11 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
         function findNearbyItem(mouseX, mouseY, seriesFilter) {
             var maxDistance = options.grid.mouseActiveRadius,
                 smallestDistance = maxDistance * maxDistance + 1,
-                item = null, foundPoint = false, i, j;
+                foundPoint = false, i, j;
                 
             var items = [];
-            for (var i = series.length - 1; i >= 0; --i) {
+            for (var i = 0; i < series.length; i++) {
+            var item = null;
                 if (!seriesFilter(series[i]))
                     continue;
 
@@ -2209,15 +2210,9 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     maxy = maxDistance / axisy.scale;
 
                 if (s.lines.show || s.points.show) {
-                    for (j = 0; j < points.length; j += ps) {
+                    for (var j = 0; j < points.length; j += ps) {
                         var x = points[j], y = points[j + 1];
                         if (x == null)
-                            continue;
-
-                        // For points and lines, the cursor must be within a
-                        // certain distance to the data point
-                        if (x - mx > maxx || x - mx < -maxx ||
-                            y - my > maxy || y - my < -maxy)
                             continue;
 
                         // We have to calculate distances in pixels, not in
@@ -2225,6 +2220,18 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                         var dx = Math.abs(axisx.p2c(x) - mouseX),
                             dy = Math.abs(axisy.p2c(y) - mouseY),
                             dist = dx * dx + dy * dy; // we save the sqrt
+                            
+                        // if option is enabled accept max vertical distance to find points
+                        if(options.xaxis.multipleSeriesEvent && dx*4 < smallestDistance) {
+                            item = [i, j / ps];
+                            continue;
+                        }
+                            
+                        // For points and lines, the cursor must be within a
+                        // certain distance to the data point
+                        if (x - mx > maxx || x - mx < -maxx ||
+                            y - my > maxy || y - my < -maxy)
+                            continue;
 
                         // use <= to ensure last point takes precedence
                         // (last generally means on top of)
@@ -2253,24 +2260,20 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                                 item = [i, j / ps];
                     }
                 }
-                if (item) items.push(item);
+                if (item) {
+                    u = item[1];
+                    var thisObject =  { 
+                        datapoint: series[i].datapoints.points.slice(u * ps, (u + 1) * ps),
+                        dataIndex: u,
+                        series: series[i],
+                        seriesIndex: i 
+                    };
+                    items.push(thisObject);
+                }
             }
 
             if (items.length) {
-                for(var thisItem = 0; thisItem < items.length; thisItem++){
-                    i = items[thisItem][0];
-                    j = items[thisItem][1];
-                    ps = series[i].datapoints.pointsize;
-
-                    var thisObject =  { datapoint: series[i].datapoints.points.slice(j * ps, (j + 1) * ps),
-                             dataIndex: j,
-                             series: series[i],
-                             seriesIndex: i };
-                    var returnArray = [];
-                    returnArray.push(thisObject);
-                }
-
-                return options.xaxis.multipleSeriesEvent ? returnArray : returnArray[0];
+                return options.xaxis.multipleSeriesEvent ? items : items[0];
             }
             
             return null;
@@ -2298,10 +2301,18 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
             pos.pageX = event.page.x;
             pos.pageY = event.page.y;
-
-            var items = [];
-            var nearbyItem = findNearbyItem(canvasX, canvasY, seriesFilter);
-            if (nearbyItem) items.push(nearbyItem);
+            
+            // clear auto-highlights
+            for (var i = 0; i < highlights.length; ++i) {
+                var h = highlights[i];
+                if (h.auto == eventname)
+                    unhighlight(h.series, h.point);
+            }            var items = [];
+                    
+            var nearbyItems = findNearbyItem(canvasX, canvasY, seriesFilter);
+            if (nearbyItems) {
+                nearbyItems instanceof Array ? items = nearbyItems : items.push(nearbyItems);
+            }
             
             if (items) {
                 for(var thisItem = 0; thisItem < items.length; thisItem++){
@@ -2314,46 +2325,37 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             if (options.grid.autoHighlight) {
                 var itemsLength = items.length ? items.length : 1;
                 for(var thisItem = 0; thisItem < itemsLength; thisItem++){
-                
                     var localItem = typeof items !== 'undefined' ? (items !== null ? items[thisItem] : {}) : {};
-                    
-                    // clear auto-highlights
-                    for (var i = 0; i < highlights.length; ++i) {
-                        var h = highlights[i];
-                        
-                        if (h.auto == eventname && !(localItem && h.series == localItem.series && h.point == localItem.datapoint))
-                            unhighlight(h.series, h.point);
-                    }
-
                     if (items.length)
                         highlight(localItem.series, localItem.datapoint, eventname);
                 }
             }
-                      
-            var timeFlag = options.xaxis.timeformat != null && items != null; 
-                
+
             // check if x axis is number or date to show tooltip as date, instead of timestamp
-            if(timeFlag) {	
+            var timeFormatFlag = options.xaxis.timeformat != null && items != null; 
+            if(timeFormatFlag) {	
                 var clonedItems = [];
                 for(var thisItem = 0; thisItem < items.length; thisItem++){
                     var datedItem = Object.clone(items[thisItem]);				// clone object
                     var dateUnformated  = new Date(datedItem.datapoint[0]);
                       
                     // correct Timezone
-                    if (options.timeZoneCorrect)
+                    if (options.timeZoneCorrect){
                         dateUnformated = fixTimeZone(dateUnformated);
+                    }
                     
                     datedItem.datapoint[0] = flot.plot.formatDate(dateUnformated, options.xaxis.timeformat);
-                    clonedItems.push(items[thisItem]);
+                    clonedItems.push(datedItem);
                 }	
             }
             
-            function removeArray(itm){
+            function controlArray(itm){
                 if (itm.length === 1 && !options.xaxis.multipleSeriesEvent) return itm[0];
                 if(itm.length) return itm;
                 return null;
             }
-            placeholder.fireEvent(eventname, [ event, pos, removeArray(timeFlag ? clonedItems : items)]);
+            var returnedItems = timeFormatFlag ? clonedItems : items;
+            placeholder.fireEvent(eventname, [ event, pos, controlArray(returnedItems)]);
         }
 
         function triggerRedrawOverlay() {
