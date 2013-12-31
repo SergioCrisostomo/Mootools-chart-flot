@@ -2224,7 +2224,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                             dy = Math.abs(axisy.p2c(y) - mouseY),
                             dist = dx * dx + dy * dy; // we save the sqrt
                             
-                        // if option is enabled accept max vertical distance to find points
+                        // if option is enabled takes max vertical distance to find points
                         if(options.xaxis.multipleSeriesEvent && dx*4 < smallestDistance) {
                             item = [i, j / ps];
                             continue;
@@ -2314,7 +2314,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     
             var nearbyItems = findNearbyItem(canvasX, canvasY, seriesFilter);
             if (nearbyItems) {
-                nearbyItems instanceof Array ? items = nearbyItems : items.push(nearbyItems);
+                items.push(nearbyItems);
             }
             
             if (items) {
@@ -2353,7 +2353,19 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             }
             
             function controlArray(itm){
-                if (eventname === 'plotclick') return itm[0];
+                if (eventname === 'plotclick'){
+                
+                    // get nearest point to clicked item using canvasX, canvasY
+                    var positionArray = []; // [ y pos, array index ]
+                    for(var m = 0; m < itm.length; m++){
+                        positionArray.push([itm[m], m]);
+                    }
+                    itm = itm.sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    return itm[0];
+                }
                 if(itm.length) return itm;
                 return null;
             }
