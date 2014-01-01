@@ -2142,8 +2142,11 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 return;
 
             var table = '<table style="width:auto;font-size:smaller;color:' + options.grid.color + '">' + fragments.join("") + '</table>';
-            if (options.legend.container != null)
-                options.legend.container.set('html', table);
+            if (options.legend.container != null){
+                if (typeof options.legend.container === 'string') var legendTarget = document.querySelector(options.legend.container);
+                if (typeof options.legend.container === 'object') var legendTarget = options.legend.container;
+                legendTarget.set('html', table);
+            }
             else {
                 var pos = "",
                     p = options.legend.position,
