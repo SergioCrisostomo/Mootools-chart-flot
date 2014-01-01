@@ -6,8 +6,7 @@ Consider a call to the plot function:
 
 	var plot = flot.plot(placeholder, data, options)
 
-The placeholder is a jQuery object or DOM element or jQuery expression
-that the plot will be put into. This placeholder needs to have its
+The placeholder is a DOM element that the plot will be put into. This placeholder needs to have its
 width and height set as explained in the README (go read that now if
 you haven't, it's short). The plot will modify some properties of the
 placeholder so it's recommended you simply pass in a div that you
@@ -143,7 +142,7 @@ Customizing the legend
 		margin: number of pixels or [x margin, y margin]
 		backgroundColor: null or color
 		backgroundOpacity: number between 0 and 1
-		container: null or jQuery object/DOM element/jQuery expression
+		container: null or DOM element/CSS expression
 	}
 
 The legend is generated as a table with the data series labels and
@@ -166,7 +165,7 @@ background. The default is a partly transparent auto-detected
 background.
 
 If you want the legend to appear somewhere else in the DOM, you can
-specify "container" as a jQuery object/expression to put the legend
+specify "container" as a DOM object/ CSS expression to put the legend
 table into. The "position" and "margin" etc. options will then be
 ignored. Note that Flot will overwrite the contents of the container.
 
@@ -1144,7 +1143,7 @@ hooks in the plugins bundled with Flot.
 	function(plot, eventHolder)
 
    Called after Flot has setup its event handlers. Should set any
-   necessary event handlers on eventHolder, a jQuery object with the
+   necessary event handlers on eventHolder, a DOM element object with the
    canvas, e.g.
 
 	function (plot, eventHolder) {
@@ -1154,7 +1153,7 @@ hooks in the plugins bundled with Flot.
 	}
 
    Interesting events include click, mousemove, mouseup/down. You can
-   use all jQuery events. Usually, the event handlers will update the
+   use all events. Usually, the event handlers will update the
    state by drawing something (add a drawOverlay hook and call
    triggerRedrawOverlay) or firing an externally visible event for
    user code. See the crosshair plugin for an example.
