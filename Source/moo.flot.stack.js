@@ -1,12 +1,8 @@
 /*
 ---
-
 script: moo.flot.stack.js
-
 name: flot.stack
-
 description: Original stack plugin ported to mootools
-
 license: [ Re-release MIT license 2011, Originally released under the MIT license by IOLA, December 2007.]
 
 authors:
@@ -20,9 +16,7 @@ requires:
   - moo.flot
 
 provides: [flot.series.stack]
-
 ...
-
 */
 
 /*
@@ -41,7 +35,7 @@ specify the default stack, you can set
 
 or specify it for a specific series
 
-  $.plot($("#placeholder"), [{ data: [ ... ], stack: true ])
+  flot.plot( (placeholder element), [{ data: [ ... ], stack: true ])
 
 The stacking order is determined by the order of the data series in
 the array (later series end up on top of the previous).
@@ -52,27 +46,30 @@ inserted through interpolation. For bar charts, the second y value is
 also adjusted.
 */
 
-(function ($) {
+(function (mooFlot) {
     var options = {
-        series: { stack: null } // or number/string
+        series: { 
+            stack: null,        // true or null - stack or no stack
+            addValues: null     // true or null - to add the stacked values or display the individual stack values
+        } 
     };
-
+    
     function init(plot) {
         function findMatchingSeries(s, allseries) {
-            var res = null
+            var res = null;
             for (var i = 0; i < allseries.length; ++i) {
                 if (s == allseries[i])
                     break;
-
+                
                 if (allseries[i].stack == s.stack)
                     res = allseries[i];
             }
-
+            
             return res;
         }
-
+        
         function stackData(plot, s, datapoints) {
-            if (s.stack == null)
+            if (s.stack == null || s.stack === false)
                 return;
 
             var other = findMatchingSeries(s, plot.getData());
@@ -85,9 +82,14 @@ also adjusted.
                 otherpoints = other.datapoints.points,
                 newpoints = [],
                 px, py, intery, qx, qy, bottom,
-                withlines = s.lines.show, withbars = s.bars.show,
+                withlines = s.lines.show,
+                horizontal = s.bars.horizontal,
+                withbottom = ps > 2 && (horizontal ? datapoints.format[2].x : datapoints.format[2].y),
                 withsteps = withlines && s.lines.steps,
-                i = 0, j = 0, l;
+                fromgap = true,
+                keyOffset = horizontal ? 1 : 0,
+                accumulateOffset = horizontal ? 0 : 1,
+                i = 0, j = 0, l, m;
 
             while (true) {
                 if (i >= points.length)
@@ -95,29 +97,42 @@ also adjusted.
 
                 l = newpoints.length;
 
-                if (j >= otherpoints.length
-                    || otherpoints[j] == null
-                    || points[i] == null) {
-                    // degenerate cases
+                if (points[i] == null) {
+                    // copy gaps
                     for (m = 0; m < ps; ++m)
                         newpoints.push(points[i + m]);
                     i += ps;
                 }
+                else if (j >= otherpoints.length) {
+                    // for lines, we can't use the rest of the points
+                    if (!withlines) {
+                        for (m = 0; m < ps; ++m)
+                            newpoints.push(points[i + m]);
+                    }
+                    i += ps;
+                }
+                else if (otherpoints[j] == null) {
+                    // oops, got a gap
+                    for (m = 0; m < ps; ++m)
+                        newpoints.push(null);
+                    fromgap = true;
+                    j += otherps;
+                }
                 else {
                     // cases where we actually got two points
-                    px = points[i];
-                    py = points[i + 1];
-                    qx = otherpoints[j];
-                    qy = otherpoints[j + 1];
+                    px = points[i + keyOffset];
+                    py = points[i + accumulateOffset];
+                    qx = otherpoints[j + keyOffset];
+                    qy = otherpoints[j + accumulateOffset];
                     bottom = 0;
 
                     if (px == qx) {
                         for (m = 0; m < ps; ++m)
                             newpoints.push(points[i + m]);
 
-                        newpoints[l + 1] += qy;
+                        newpoints[l + accumulateOffset] += qy;
                         bottom = qy;
-
+                        
                         i += ps;
                         j += otherps;
                     }
@@ -125,31 +140,39 @@ also adjusted.
                         // we got past point below, might need to
                         // insert interpolated extra point
                         if (withlines && i > 0 && points[i - ps] != null) {
-                            intery = py + (points[i - ps + 1] - py) * (qx - px) / (points[i - ps] - px);
+                            intery = py + (points[i - ps + accumulateOffset] - py) * (qx - px) / (points[i - ps + keyOffset] - px);
                             newpoints.push(qx);
-                            newpoints.push(intery + qy)
+                            newpoints.push(intery + qy);
                             for (m = 2; m < ps; ++m)
                                 newpoints.push(points[i + m]);
-                            bottom = qy;
+                            bottom = qy; 
                         }
 
                         j += otherps;
                     }
-                    else {
+                    else { // px < qx
+                        if (fromgap && withlines) {
+                            // if we come from a gap, we just skip this point
+                            i += ps;
+                            continue;
+                        }
+                            
                         for (m = 0; m < ps; ++m)
                             newpoints.push(points[i + m]);
-
+                        
                         // we might be able to interpolate a point below,
                         // this can give us a better y
-                        if (withlines && j > 0 && otherpoints[j - ps] != null)
-                            bottom = qy + (otherpoints[j - ps + 1] - qy) * (px - qx) / (otherpoints[j - ps] - qx);
+                        if (withlines && j > 0 && otherpoints[j - otherps] != null)
+                            bottom = qy + (otherpoints[j - otherps + accumulateOffset] - qy) * (px - qx) / (otherpoints[j - otherps + keyOffset] - qx);
 
-                        newpoints[l + 1] += bottom;
-
+                        newpoints[l + accumulateOffset] += bottom;
+                        
                         i += ps;
                     }
 
-                    if (l != newpoints.length && withbars)
+                    fromgap = false;
+                    
+                    if (l != newpoints.length && withbottom)
                         newpoints[l + 2] += bottom;
                 }
 
@@ -166,14 +189,14 @@ also adjusted.
 
             datapoints.points = newpoints;
         }
-
+        
         plot.hooks.processDatapoints.push(stackData);
     }
-
-    $.plot.plugins.push({
+    
+    mooFlot.plot.plugins.push({
         init: init,
         options: options,
         name: 'stack',
-        version: '1.0'
+        version: '1.2'
     });
 })(flot);
