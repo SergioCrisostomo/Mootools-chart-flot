@@ -306,8 +306,9 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
                     d[i].data = s.data;
                 }
-                else
+                else {
                     s.data = d[i];
+                }
                 res.push(s);
             }
 
@@ -2270,6 +2271,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     u = item[1];
                     var thisObject =  { 
                         datapoint: series[i].datapoints.points.slice(u * ps, (u + 1) * ps),
+                        customData: series[i].customData ? series[i].customData.slice(u * ps /2, (u + 1) * ps /2)[0] : null,
                         dataIndex: u,
                         series: series[i],
                         seriesIndex: i 

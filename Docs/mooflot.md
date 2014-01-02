@@ -1198,15 +1198,20 @@ hooks in the plugins bundled with Flot.
    add a callback to clean up after you. Take a look at the section in
    PLUGINS.txt for more info.
 
-AddOns options
+AddOns & options
 -------
 
-    multipleSeriesEvent // defaults to null 
+    multipleSeriesEvent // defaults to null (option)
     // true or null - Allows to select multiple points on same x point
     // in different series
     
-    swipeLine // defaults to null 
+    swipeLine // defaults to null (option)
     // true or null - Swipe line over y (from top to bottom) following the mouse movement
+    
+    customData (new feature)
+    // Besides data, label, etc is now possible to pass a `customData` array into the data object. 
+    // This array should be the same length of the points in that series and will be returned the 
+    // corresponding customData array for each point of the series
    
 Plugins
 -------
