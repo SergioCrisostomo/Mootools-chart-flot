@@ -2415,14 +2415,13 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
         
         function drawSwipeLine(mouseX, snapX, points){
             draw();
-
             var l = plotOffset.left;
             var r = plotOffset.right;
             var t = plotOffset.top;
             var w = plot.height() + t;
 
             // swipe line's X axis value
-            var xAxisValue = snapX ? snapX * (ctx.canvas.width - l - r) / points + l : mouseX + l;
+            var xAxisValue = snapX !== null ? snapX * (ctx.canvas.width - l - r) / points + l : mouseX + l;
 
             // avoid getting out of canvas
             if (xAxisValue < l) xAxisValue = l;
