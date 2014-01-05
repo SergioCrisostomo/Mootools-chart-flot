@@ -49,8 +49,7 @@ also adjusted.
 (function (mooFlot) {
     var options = {
         series: { 
-            stack: null,        // true or null - stack or no stack
-            addValues: null     // true or null - to add the stacked values or display the individual stack values
+            stack: null        // true or null - stack or no stack
         } 
     };
     
