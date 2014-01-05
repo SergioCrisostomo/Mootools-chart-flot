@@ -2197,12 +2197,10 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             var maxDistance = options.grid.mouseActiveRadius,
                 smallestDistance = maxDistance * maxDistance + 1,
                 foundPoint = false, i, j;
-                
-            if (options.xaxis.swipeLine) drawSwipeLine(mouseX);
             
             var items = [];
             for (var i = 0; i < series.length; i++) {
-            var item = null;
+                var item = null;
                 if (!seriesFilter(series[i]))
                     continue;
 
@@ -2267,6 +2265,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                                 item = [i, j / ps];
                     }
                 }
+				
                 if (item) {
                     u = item[1];
                     var thisObject =  { 
@@ -2276,10 +2275,11 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                         series: series[i],
                         seriesIndex: i 
                     };
+
                     items.push(thisObject);
                 }
             }
- 
+			
             if (items.length) {
                 return items;
             }
@@ -2320,6 +2320,15 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             var nearbyItems = findNearbyItem(canvasX, canvasY, seriesFilter);
             if (nearbyItems) {
                 items = nearbyItems;
+            }
+
+            // when swipeline is on
+            if (options.xaxis.swipeLine){
+                drawSwipeLine(
+                    canvasX, 
+                    items.length ? items[0].datapoint[0] : null, 
+                    items.length ? series[items[0].seriesIndex].xaxis.max - series[items[0].seriesIndex].xaxis.min : null
+                );
             }
             
             if (items) {
@@ -2404,16 +2413,25 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             executeHooks(hooks.drawOverlay, [octx]);
         }
         
-        function drawSwipeLine(mouseX){
+        function drawSwipeLine(mouseX, snapX, points){
             draw();
-            ctx.beginPath();
-            var l = plot.offset().left;
-            var t = plot.offset().top;
+            var l = plotOffset.left;
+            var r = plotOffset.right;
+            var t = plotOffset.top;
             var w = plot.height() + t;
+
+            // swipe line's X axis value
+            var xAxisValue = snapX !== null ? snapX * (ctx.canvas.width - l - r) / points + l : mouseX + l;
+
+            // avoid getting out of canvas
+            if (xAxisValue < l) xAxisValue = l;
+            if (xAxisValue > ctx.canvas.width + l) xAxisValue = ctx.canvas.width + l;
+            
+            ctx.beginPath();
             ctx.lineWidth = 1;
             ctx.strokeStyle = 'grey';
-            ctx.moveTo(mouseX + l, t);
-            ctx.lineTo(mouseX + l, w);
+            ctx.moveTo(xAxisValue , t);
+            ctx.lineTo(xAxisValue, w);
             ctx.closePath();
             ctx.stroke();
         }
