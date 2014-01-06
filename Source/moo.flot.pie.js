@@ -65,7 +65,7 @@ More detail and specific examples can be found in the included HTML file.
 
 */
 
-(function(mooFlot) {
+(function(mooflot) {
 
 	// Maximum redraw attempts when fitting labels within the plot
 
@@ -263,9 +263,9 @@ More detail and specific examples can be found in the included HTML file.
 				return; // if no series were passed
 			}
 
-			var canvasWidth = plot.getPlaceholder().width(),
-				canvasHeight = plot.getPlaceholder().height(),
-				legendWidth = target.children().filter(".legend").children().width() || 0;
+			var canvasWidth = plot.getPlaceholder().getSize().x,
+				canvasHeight = plot.getPlaceholder().getSize().y,
+				legendWidth = target.getChildren().getElement(".legend").getChildren().getSize().x || 0;
 
 			ctx = newCtx;
 
@@ -500,18 +500,18 @@ More detail and specific examples can be found in the included HTML file.
 						var y = centerTop + Math.round(Math.sin(halfAngle) * radius) * options.series.pie.tilt;
 
 						var html = "<span class='pieLabel' id='pieLabel" + index + "' style='position:absolute;top:" + y + "px;left:" + x + "px;'>" + text + "</span>";
-						target.append(html);
+						target.adopt(html);
 
-						var label = target.children("#pieLabel" + index);
-						var labelTop = (y - label.height() / 2);
-						var labelLeft = (x - label.width() / 2);
+						var label = document.getElementById("pieLabel" + index);
+						var labelTop = (y - label.getSize().y / 2);
+						var labelLeft = (x - label.getSize().x / 2);
 
 						label.css("top", labelTop);
 						label.css("left", labelLeft);
 
 						// check to make sure that the label is not outside the canvas
 
-						if (0 - labelTop > 0 || 0 - labelLeft > 0 || canvasHeight - (labelTop + label.height()) < 0 || canvasWidth - (labelLeft + label.width()) < 0) {
+						if (0 - labelTop > 0 || 0 - labelLeft > 0 || canvasHeight - (labelTop + label.getSize().y) < 0 || canvasWidth - (labelLeft + label.getSize().x) < 0) {
 							return false;
 						}
 
@@ -525,21 +525,19 @@ More detail and specific examples can be found in the included HTML file.
 								c = slice.color;
 							}
 
-							var pos = "top:" + labelTop + "px;left:" + labelLeft + "px;";
                             var newElement = new Element( 'div', {
                                 'class': 'pieLabelBackground',
                                 styles: {
                                     position: absolute,
-                                    width: label.width() + "px",
-                                    height: label.height() + "px",
+                                    width: label.getSize().x + "px",
+                                    height: label.getSize().y + "px",
                                     top: labelTop + "px",
                                     left: labelLeft + "px",
                                     backgroundColor: c,
                                     opacity: options.series.pie.label.background.opacity
                                 }
                             });
-                                // also convert to Mootools
-								newElement.insertBefore(label);
+                            label.grab(newElement, 'top');
 						}
 
 						return true;
@@ -828,7 +826,7 @@ More detail and specific examples can be found in the included HTML file.
 		}
 	};
 
-	mooFlot.plot.plugins.push({
+	mooflot.plot.plugins.push({
 		init: init,
 		options: options,
 		name: "pie",
