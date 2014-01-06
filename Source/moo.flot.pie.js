@@ -131,10 +131,13 @@ More detail and specific examples can be found in the included HTML file.
 			var options = plot.getOptions();
 			if (options.series.pie.show) {
 				if (options.grid.hoverable) {
-					eventHolder.unbind("mousemove").mousemove(onMouseMove);
+					eventHolder.removeEvent("mousemove", mooflot.onMouseMove);
+					eventHolder.addEvent("click", onMouseMove);
 				}
 				if (options.grid.clickable) {
-					eventHolder.unbind("click").click(onClick);
+					console.log(onClick, mooflot.plot);
+					eventHolder.removeEvent("click", mooflot.onClick);
+					eventHolder.addEvent("click", onClick);
 				}
 			}
 		});
@@ -264,8 +267,11 @@ More detail and specific examples can be found in the included HTML file.
 			}
 
 			var canvasWidth = plot.getPlaceholder().getSize().x,
-				canvasHeight = plot.getPlaceholder().getSize().y,
-				legendWidth = target.getChildren().getElement(".legend").getChildren().getSize().x || 0;
+				canvasHeight = plot.getPlaceholder().getSize().y;
+			var legendWidth = 0;
+			target.getChildren().getElement(".legend > *").each(function(el){
+				el && (legendWidth += el.getSize().x);
+			});
 
 			ctx = newCtx;
 
@@ -344,7 +350,8 @@ More detail and specific examples can be found in the included HTML file.
 
 			function clear() {
 				ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-				target.children().filter(".pieLabel, .pieLabelBackground").remove();
+				var toDestroy = target.getChildren().filter(".pieLabel, .pieLabelBackground");
+				toDestroy.destroy();
 			}
 
 			function drawShadow() {
@@ -637,7 +644,7 @@ More detail and specific examples can be found in the included HTML file.
 							arrPoly = [[0, 0], [p1X, p1Y], [p2X, p2Y], [p3X, p3Y], [p4X, p4Y], [p5X, p5Y]],
 							arrPoint = [x, y];
 
-						// TODO: perhaps do some mathmatical trickery here with the Y-coordinate to compensate for pie tilt?
+						// TODO: perhaps do some mathematical trickery here with the Y-coordinate to compensate for pie tilt?
 
 						if (isPointInPoly(arrPoly, arrPoint)) {
 							ctx.restore();
@@ -662,16 +669,16 @@ More detail and specific examples can be found in the included HTML file.
 		}
 
 		function onClick(e) {
+        console.log('onClick function inside pie');
 			triggerClickHoverEvent("plotclick", e);
 		}
 
 		// trigger click or hover event (they send the same parameters so we share their code)
 
 		function triggerClickHoverEvent(eventname, e) {
-
 			var offset = plot.offset();
-			var canvasX = parseInt(e.pageX - offset.left);
-			var canvasY =  parseInt(e.pageY - offset.top);
+			var canvasX = parseInt(e.page.x - offset.left);
+			var canvasY =  parseInt(e.page.y - offset.top);
 			var item = findNearbySlice(canvasX, canvasY);
 
 			if (options.grid.autoHighlight) {
@@ -692,10 +699,9 @@ More detail and specific examples can be found in the included HTML file.
 				highlight(item.series, eventname);
 			}
 
-			// trigger any hover bind events
-
-			var pos = { pageX: e.pageX, pageY: e.pageY };
-			target.trigger(eventname, [pos, item]);
+			// trigger any hover events
+			var pos = { pageX: e.page.x, pageY: e.page.y };
+			target.fireEvent(eventname, [e, pos, [item]]);
 		}
 
 		function highlight(s, auto) {

@@ -734,7 +734,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             if (options.grid.clickable)
                 placeholder.addEvent('click', onClick);
 
-            executeHooks(hooks.bindEvents, [eventHolder]);
+            executeHooks(hooks.bindEvents, placeholder);
         }
 
         function setTransformationHelpers(axis) {
