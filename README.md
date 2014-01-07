@@ -9,13 +9,16 @@ Everything is as originally wrote in v 0.6 (execept now runs on mootools).
 
 Documentation can be found here [http://flot.googlecode.com/svn/trunk/API.txt](http://flot.googlecode.com/svn/trunk/API.txt)
 
-**You can check a working example here:** http://jsfiddle.net/YuWqj/
-
-Contributers for the Mootools life of FLOT
+Live examples
 ----------
 
-@fat   
-@SergioCrisostomo
+*Lines: * http://jsfiddle.net/YuWqj/1/
+*Lines with points: * http://jsfiddle.net/YuWqj/
+
+*Bars: * http://jsfiddle.net/YuWqj/2/
+*Bars with stack: * http://jsfiddle.net/ee323/
+
+*Pie chart: * http://jsfiddle.net/238XE/
 
 
 
