@@ -1,13 +1,3 @@
-/**********************************
-*
-*
-*   UNTESTED IN MOOTOOLS VERSION
-*
-*
-************************************/
-
-
-
 /* Flot plugin for rendering pie charts.
 
 Copyright (c) 2007-2013 IOLA and Ole Laursen.
@@ -22,6 +12,8 @@ percentages internally.
 * Created by Brian Medendorp
 
 * Updated with contributions from btburnett3, Anthony Aragues and Xavi Ivars
+
+* Adapted to Mootools by Sergio - jsFiddle: http://jsfiddle.net/238XE/
 
 The plugin supports these options:
 
