@@ -12,13 +12,13 @@ Documentation can be found here [http://flot.googlecode.com/svn/trunk/API.txt](h
 Live examples
 ----------
 
-*Lines: * http://jsfiddle.net/YuWqj/1/
-*Lines with points: * http://jsfiddle.net/YuWqj/
+- __Lines:__ http://jsfiddle.net/YuWqj/1/    
+- __Lines with points:__ http://jsfiddle.net/YuWqj/    
 
-*Bars: * http://jsfiddle.net/YuWqj/2/
-*Bars with stack: * http://jsfiddle.net/ee323/
+- __Bars:__ http://jsfiddle.net/YuWqj/2/    
+- __Bars with stack:__ http://jsfiddle.net/ee323/    
 
-*Pie chart: * http://jsfiddle.net/238XE/
+- __Pie chart:__ http://jsfiddle.net/238XE/    
 
 
 
