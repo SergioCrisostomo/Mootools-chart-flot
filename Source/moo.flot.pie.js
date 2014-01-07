@@ -131,12 +131,11 @@ More detail and specific examples can be found in the included HTML file.
 			var options = plot.getOptions();
 			if (options.series.pie.show) {
 				if (options.grid.hoverable) {
-					eventHolder.removeEvent("mousemove", mooflot.onMouseMove);
+					eventHolder.removeEvents("mousemove");
 					eventHolder.addEvent("click", onMouseMove);
 				}
 				if (options.grid.clickable) {
-					console.log(onClick, mooflot.plot);
-					eventHolder.removeEvent("click", mooflot.onClick);
+					eventHolder.removeEvents("click");
 					eventHolder.addEvent("click", onClick);
 				}
 			}
@@ -669,7 +668,6 @@ More detail and specific examples can be found in the included HTML file.
 		}
 
 		function onClick(e) {
-        console.log('onClick function inside pie');
 			triggerClickHoverEvent("plotclick", e);
 		}
 
