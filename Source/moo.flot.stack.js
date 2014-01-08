@@ -10,7 +10,7 @@ authors:
   - Original stacker people
 
 requires:
-  - core/1.3: '*'
+  - core/1.3 - 1.4: '*'
   - more
   - more/utilities/color
   - moo.flot
