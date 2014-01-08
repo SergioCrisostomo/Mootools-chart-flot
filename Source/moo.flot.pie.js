@@ -1,3 +1,31 @@
+/*
+---
+script: moo.flot.pie.js
+name: mooflot pie
+description: Pie chart plugin for flot library ported to work with mootools. 
+    The plugin assumes that each series has a single data value, and that each
+    value is a positive integer or zero.  Negative numbers don't make sense for a
+    pie chart, and have unpredictable results.  The values do NOT need to be
+    passed in as percentages; the plugin will calculate the total and per-slice
+    percentages internally.
+license: [ Re-release MIT license 2011, Originally released under the MIT license by IOLA, December 2007.]
+authors:
+  - Medendorp (creator)
+  - btburnett3
+  - Anthony Aragues
+  - Xavi Ivars
+  - Sergio Crisostomo
+
+requires:
+  - core/1.3 - 1.4: '*'
+  - more
+  - more/utilities/color
+  - moo.flot
+  
+provides: [flot.piecharts]
+...
+*/
+
 /* Flot plugin for rendering pie charts.
 
 Copyright (c) 2007-2013 IOLA and Ole Laursen.
@@ -13,7 +41,7 @@ percentages internally.
 
 * Updated with contributions from btburnett3, Anthony Aragues and Xavi Ivars
 
-* Adapted to Mootools by SergioCrisostomo - jsFiddle: http://jsfiddle.net/238XE/
+* Adapted to Mootools by SergioCrisostomo - jsFiddle: http://jsfiddle.net/D996U/
 
 */
 
