@@ -1,6 +1,5 @@
 /*
 ---
-
 script: moo.flot.js
 name: mooflot
 description: The base flot library ported to work with mootools.
@@ -11,7 +10,7 @@ authors:
   - @SergioCrisostomo
 
 requires:
-  - core/1.3: '*'
+  - core/1.3 - 1.4: '*'
   - more
   - more/utilities/color
 provides: [mooflot]
@@ -240,6 +239,17 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             if (options.grid.tickColor == null)
                 options.grid.tickColor = 'rgba(' + new Color('#fff') + ',.22)'
 
+            // check options.xaxes and options.yaxes
+            // if they are undefined or empty set the default to
+            // an array with 1 empty obj so it does not crash later on
+
+            if (!options.xaxes || xaxes.length === 0) {
+                options.xaxes = [ {} ];
+            }
+            if (!options.yaxes || yaxes.length === 0) {
+                options.yaxes = [ {} ];
+            }  
+                
             // fill in defaults in axes, copy at least always the
             // first as the rest of the code assumes it'll be there
             for (i = 0; i < Math.max(1, options.xaxes.length); ++i)
@@ -1732,7 +1742,36 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
                     prevx = x2;
                     prevy = y2;
-                    ctx.lineTo(axisx.p2c(x2) + xoffset, axisy.p2c(y2) + yoffset);
+                    
+                    // check interpolation option to see how lines should be drawn
+                    // inspired from https://github.com/Joe8Bit/smoothie/blob/master/smoothie.js
+
+                    switch (options.series.interpolation) {
+                    case "bezier":
+
+                        // Great explanation of Bezier curves: http://en.wikipedia.org/wiki/Bezier_curve#Quadratic_curves
+                        //
+                        // Assuming A was the last point in the line plotted and B is the new point,
+                        // we draw a curve with control points P and Q as below.
+                        //
+                        // A---P
+                        //     |
+                        //     |
+                        //     |
+                        //     Q---B
+                        //
+                        // Importantly, A and P are at the same y coordinate, as are B and Q. This is
+                        // so adjacent curves appear to flow as one.
+                        
+                        ctx.bezierCurveTo ( // startPoint (A) is implicit from last iteration of loop
+                            Math.round((axisx.p2c(x1) + xoffset + axisx.p2c(x2) + xoffset) / 2), axisy.p2c(y1) + yoffset, // controlPoint1 (P)
+                            Math.round((axisx.p2c(x1) + xoffset + axisx.p2c(x2) + xoffset) / 2), axisy.p2c(y2) + yoffset, // controlPoint2 (Q)
+                            axisx.p2c(x2) + xoffset, axisy.p2c(y2) + yoffset); // endPoint (B)
+                        break;
+                    default: // line
+                        ctx.lineTo(axisx.p2c(x2) + xoffset, axisy.p2c(y2) + yoffset);
+                        break;
+                    }
                 }
                 ctx.stroke();
             }

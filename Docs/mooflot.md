@@ -1212,6 +1212,10 @@ AddOns & options
     // Besides data, label, etc is now possible to pass a `customData` array into the data object. 
     // This array should be the same length of the points in that series and will be returned the 
     // corresponding customData array for each point of the series
+    
+    bezier curves (new feature)
+    // Possibility to see the lines as curves instead of edges in the points
+    // The script will check options.series.interpolation, so use 'bezier' in this case.
    
 Plugins
 -------
