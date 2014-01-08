@@ -14,7 +14,7 @@ Live examples
 
 ####Lines
 - __Lines:__                    http://jsfiddle.net/UL3d9/  
-- __Lines with bezier curves:__ http://jsfiddle.net/4zpFS/ 
+- __Lines with bezier curves:__ http://jsfiddle.net/eQ3n8/
 - __Lines with points:__        http://jsfiddle.net/4zpFS/  
 
 ####Bars
