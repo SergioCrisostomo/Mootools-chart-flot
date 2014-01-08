@@ -22,7 +22,7 @@ requires:
   - more/utilities/color
   - moo.flot
   
-provides: [flot.piecharts]
+provides: [mooflot]
 ...
 */
 
