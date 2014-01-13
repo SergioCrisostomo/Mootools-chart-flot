@@ -24,6 +24,8 @@ Live examples
 ####Pie
 - __Pie chart:__                http://jsfiddle.net/D996U/  
 
+####Moving Chart
+- __Self updating chart:__      http://jsfiddle.net/xmVLx/ 
 
 
 How to use
