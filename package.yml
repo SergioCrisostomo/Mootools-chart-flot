@@ -2,6 +2,6 @@ name: mooflot - Charts for Mootools
 author: sergiosbox
 category: Utilities
 tags: [flot, chart, charting, graphing, canvas]
-#docs: https://github.com/SergioCrisostomo/Mootools-chart-flot/tree/master/Docs
-#demo: http://jsfiddle.net/4zpFS/
-#current: 0.7.8
+docs: https://github.com/SergioCrisostomo/Mootools-chart-flot/tree/master/Docs
+demo: http://jsfiddle.net/4zpFS/
+current: 0.7.8
