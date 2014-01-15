@@ -1744,7 +1744,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     prevy = y2;
                     
                     // check interpolation option to see how lines should be drawn
-                    // inspired from https://github.com/Joe8Bit/smoothie/blob/master/smoothie.js
+                    // from https://github.com/flot/flot/pull/1158
 
                     switch (options.series.interpolation) {
                     case "bezier":
@@ -1907,8 +1907,23 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     // fill triangular section, this sometimes result
                     // in redundant points if (x1, y1) hasn't changed
                     // from previous line to, but we just ignore that
-                    ctx.lineTo(axisx.p2c(x1), axisy.p2c(y1));
-                    ctx.lineTo(axisx.p2c(x2), axisy.p2c(y2));
+                    switch (options.series.interpolation) {
+                        case "bezier":
+
+                            if(i == ps){
+                                ctx.moveTo(axisx.p2c(x1), axisy.p2c(y1));
+                            }
+                            ctx.bezierCurveTo ( // startPoint (A) is implicit from last iteration of loop
+                            Math.round((axisx.p2c(x1) +  axisx.p2c(x2) ) / 2), axisy.p2c(y1), // controlPoint1 (P)
+                            Math.round((axisx.p2c(x1) + axisx.p2c(x2) ) / 2), axisy.p2c(y2), // controlPoint2 (Q)
+                            axisx.p2c(x2), axisy.p2c(y2)); // endPoint (B)
+                        break;
+                        
+                        default: // line
+                            ctx.lineTo(axisx.p2c(x1), axisy.p2c(y1));
+                            ctx.lineTo(axisx.p2c(x2), axisy.p2c(y2));
+                        break;
+                    }
 
                     // fill the other rectangle if it's there
                     if (x2 != x2old) {
