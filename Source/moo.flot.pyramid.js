@@ -12,7 +12,7 @@ requires:
   - more
   - more/utilities/color
   - moo.flot
-provides: [flot.selection]
+provides: [flot.FlotPyramid]
 ...
 */
 
@@ -52,7 +52,7 @@ var FlotPyramid = (function(){
       // Configure _flot_ options in order to plot the data using _bars_,
       // extending any user defined _bars_ options to get _hotizontal_,
       // _centered_ bars. If the user supplies a custom barWidth, use it.
-      Object.merge(options.series.bars, {
+      Object.append(options.series.bars, {
         show: true,
         horizontal: true,
         align: 'center',
@@ -63,14 +63,14 @@ var FlotPyramid = (function(){
 
       // Configure the custom pyramid X axis tick formatter, preserving the
       // user defined one, if any.
-      Object.merge(xaxis, {
+      Object.append(xaxis, {
         tickFormatter: xaxisTickFormatter(xaxis.tickFormatter)
       });
 
       var yaxis = options.yaxes[options.series.yaxis - 1 || 0];
 
       // Use custom Y axis ticks.
-      Object.merge(yaxis, {
+      Object.append(yaxis, {
         ticks: plot.pyramidYaxisTicks
       });
 
@@ -149,10 +149,8 @@ var FlotPyramid = (function(){
     // Get the maximum value in the series data.
     values = data.map(function(d){return d[1]});
 
-
     max = values[0];
     for (i=0 ; i<values.length;i++) {if(values[i]>max) { max= values[i] };}
-
 
     // Compare the maximum value to the global maximum for the axis.
     // TODO: replace that 0 with the relevant axis index
