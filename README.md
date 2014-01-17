@@ -14,8 +14,9 @@ Live examples
 
 ####Lines
 - __Lines:__                    http://jsfiddle.net/UL3d9/  
-- __Lines with bezier curves:__ http://jsfiddle.net/eQ3n8/
 - __Lines with points:__        http://jsfiddle.net/4zpFS/  
+- __Lines with bezier curves:__ http://jsfiddle.net/eQ3n8/
+- __Bezier curves & fill:__     http://jsfiddle.net/4b9sQ/
 
 ####Bars
 - __Bars:__                     http://jsfiddle.net/MPLyB/  
@@ -23,6 +24,9 @@ Live examples
 
 ####Pie
 - __Pie chart:__                http://jsfiddle.net/D996U/  
+
+####Pyramid
+- __Pyramid chart:__            http://jsfiddle.net/M62Dr/ 
 
 ####Moving Chart
 - __Self updating chart:__      http://jsfiddle.net/Q3VK2/
