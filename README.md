@@ -20,7 +20,8 @@ Live examples
 
 ####Bars
 - __Bars:__                     http://jsfiddle.net/MPLyB/  
-- __Bars with stack:__          http://jsfiddle.net/J4mPM/   
+- __Bars with stack:__          http://jsfiddle.net/J4mPM/ 
+- __Side by side ordered bars:__http://jsfiddle.net/y6YZm/ 
 
 ####Pie
 - __Pie chart:__                http://jsfiddle.net/D996U/  
