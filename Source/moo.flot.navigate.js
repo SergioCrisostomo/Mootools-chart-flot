@@ -125,7 +125,7 @@ Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-L
 
 
 
-(function ($) {
+(function (flot) {
     var options = {
         xaxis: {
             zoomRange: null, // or [number, number] (min range, max range)
@@ -202,7 +202,7 @@ Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-L
         function bindEvents(plot, eventHolder) {
             var o = plot.getOptions();
             if (o.zoom.interactive) {
-                eventHolder[o.zoom.trigger](onZoomClick);
+                eventHolder[o.zoom.fireEvent](onZoomClick);
                 eventHolder.mousewheel(onMouseWheel);
             }
 
@@ -230,7 +230,7 @@ Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-L
             
             var c = args.center,
                 amount = args.amount || plot.getOptions().zoom.amount,
-                w = plot.width(), h = plot.height();
+                w = plot.getSize().x, h = plot.getSize().y;
 
             if (!c)
                 c = { left: w / 2, top: h / 2 };
@@ -248,7 +248,7 @@ Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-L
                     }
                 };
 
-            $.each(plot.getAxes(), function(_, axis) {
+            Array.each(plot.getAxes(), function(axis, _) {
                 var opts = axis.options,
                     min = minmax[axis.direction].min,
                     max = minmax[axis.direction].max,
@@ -280,7 +280,7 @@ Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-L
             plot.draw();
             
             if (!args.preventEvent)
-                plot.getPlaceholder().trigger("plotzoom", [ plot ]);
+                plot.getPlaceholder().fireEvent("plotzoom", [ plot ]);
         }
 
         plot.pan = function (args) {
@@ -294,7 +294,7 @@ Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-L
             if (isNaN(delta.y))
                 delta.y = 0;
 
-            $.each(plot.getAxes(), function (_, axis) {
+            Array.each(plot.getAxes(), function (axis, _) {
                 var opts = axis.options,
                     min, max, d = delta[axis.direction];
 
@@ -328,15 +328,15 @@ Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-L
             plot.draw();
             
             if (!args.preventEvent)
-                plot.getPlaceholder().trigger("plotpan", [ plot ]);
+                plot.getPlaceholder().fireEvent("plotpan", [ plot ]);
         }
 
         function shutdown(plot, eventHolder) {
-            eventHolder.unbind(plot.getOptions().zoom.trigger, onZoomClick);
-            eventHolder.unbind("mousewheel", onMouseWheel);
-            eventHolder.unbind("dragstart", onDragStart);
-            eventHolder.unbind("drag", onDrag);
-            eventHolder.unbind("dragend", onDragEnd);
+            eventHolder.removeEvent(plot.getOptions().zoom.fireEvent, onZoomClick);
+            eventHolder.removeEvent("mousewheel", onMouseWheel);
+            eventHolder.removeEvent("dragstart", onDragStart);
+            eventHolder.removeEvent("drag", onDrag);
+            eventHolder.removeEvent("dragend", onDragEnd);
             if (panTimeout)
                 clearTimeout(panTimeout);
         }
@@ -345,10 +345,10 @@ Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-L
         plot.hooks.shutdown.push(shutdown);
     }
     
-    $.plot.plugins.push({
+    flot.plot.plugins.push({
         init: init,
         options: options,
         name: 'navigate',
         version: '1.3'
     });
-})(jQuery);
+})(flot);
