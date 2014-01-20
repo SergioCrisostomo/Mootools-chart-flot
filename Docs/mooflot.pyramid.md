@@ -1,6 +1,8 @@
 flot.pyramid
 ============
 
+Live example: http://jsfiddle.net/M62Dr/
+
 This is a plugin for drawing [population pyramids](http://en.wikipedia.org/wiki/Population_pyramid) with [flot](http://code.google.com/p/flot/).
 
 This is a very simple (too simple, I fear) approach to population pyramid plotting, but it works for me. It uses horizontal bars and does some data preprocessing in order to extract the Y axis labels and flip one of the series, so it is drawn in the negative region of the X axis. The labels in the X axis are formatted so we do not get negative values.
