@@ -187,8 +187,8 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
         plot.triggerRedrawOverlay = triggerRedrawOverlay;
         plot.pointOffset = function(point) {
             return {
-                left: parseInt(xaxes[axisNumber(point, "x") - 1].p2c(+point.x) + plotOffset.left),
-                top: parseInt(yaxes[axisNumber(point, "y") - 1].p2c(+point.y) + plotOffset.top)
+                left: parseInt(xaxes[axisNumber(point, "x") - 1].p2c(+point.x) + plotOffset.left, 10),
+                top: parseInt(yaxes[axisNumber(point, "y") - 1].p2c(+point.y) + plotOffset.top, 10)
             };
         };
 
@@ -237,7 +237,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             if (options.grid.borderColor == null)
                 options.grid.borderColor = options.grid.color;
             if (options.grid.tickColor == null)
-                options.grid.tickColor = 'rgba(' + new Color('#fff') + ',.22)'
+                options.grid.tickColor = 'rgba(' + new Color('#fff') + ',.22)';
 
             // check options.xaxes and options.yaxes
             // if they are undefined or empty set the default to
@@ -248,8 +248,8 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             }
             if (!options.yaxes || yaxes.length === 0) {
                 options.yaxes = [ {} ];
-            }  
-                
+            }
+
             // fill in defaults in axes, copy at least always the
             // first as the rest of the code assumes it'll be there
             for (i = 0; i < Math.max(1, options.xaxes.length); ++i)
@@ -454,7 +454,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
                 // vary color if needed
                 var sign = variation % 2 == 1 ? -1 : 1;
-                c.setSaturation(1 + sign * Math.ceil(variation / 2) * 0.2)
+                c.setSaturation(1 + sign * Math.ceil(variation / 2) * 0.2);
 
                 colors.push('rgb(' +  c + ')');
 
@@ -696,7 +696,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
         function constructCanvas() {
             function makeCanvas(width, height) {
-                var c = document.createElement('canvas');
+                var c = new Element('canvas');
                 c.width = width;
                 c.height = height;
                 if (!c.getContext) // excanvas hack
@@ -704,8 +704,8 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 return c;
             }
 
-            canvasWidth = placeholder.getSize().x || parseInt(placeholder.getStyle('width'));
-            canvasHeight = placeholder.getSize().y || parseInt(placeholder.getStyle('height'));
+            canvasWidth = placeholder.getSize().x || parseInt(placeholder.getStyle('width'), 10);
+            canvasHeight = placeholder.getSize().y || parseInt(placeholder.getStyle('height'), 10);
             placeholder.set('html',""); // clear placeholder
             if (placeholder.getStyle("position") == 'static')
                 placeholder.getStyle("position", "relative"); // for positioning labels and overlay
@@ -833,7 +833,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                         // collective height
                         labels.push('<div style="clear:left"></div>');
                         dummyDiv = makeDummyDiv(labels, 10000);
-                        h = dummyDiv.getSize().y || parseInt(dummyDiv.getStyle('height'));
+                        h = dummyDiv.getSize().y || parseInt(dummyDiv.getStyle('height'), 10);
                         dummyDiv.destroy();
                     }
                 }
@@ -1194,13 +1194,13 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 };
 
                 formatter = function (v, axis) {
-					
+
                     var d = new Date(v);
-                                        
+
                     // correct Timezone
                     if (options.timeZoneCorrect)
                         d = fixTimeZone(d);
-					
+
                     // first check global format
                     if (opts.timeformat != null)
                         return flot.plot.formatDate(d, opts.timeformat, opts.monthNames);
@@ -1742,7 +1742,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
                     prevx = x2;
                     prevy = y2;
-                    
+
                     // check interpolation option to see how lines should be drawn
                     // from https://github.com/flot/flot/pull/1158
 
@@ -1762,7 +1762,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                         //
                         // Importantly, A and P are at the same y coordinate, as are B and Q. This is
                         // so adjacent curves appear to flow as one.
-                        
+
                         ctx.bezierCurveTo ( // startPoint (A) is implicit from last iteration of loop
                             Math.round((axisx.p2c(x1) + xoffset + axisx.p2c(x2) + xoffset) / 2), axisy.p2c(y1) + yoffset, // controlPoint1 (P)
                             Math.round((axisx.p2c(x1) + xoffset + axisx.p2c(x2) + xoffset) / 2), axisy.p2c(y2) + yoffset, // controlPoint2 (Q)
@@ -1918,7 +1918,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                             Math.round((axisx.p2c(x1) + axisx.p2c(x2) ) / 2), axisy.p2c(y2), // controlPoint2 (Q)
                             axisx.p2c(x2), axisy.p2c(y2)); // endPoint (B)
                         break;
-                        
+
                         default: // line
                             ctx.lineTo(axisx.p2c(x1), axisy.p2c(y1));
                             ctx.lineTo(axisx.p2c(x2), axisy.p2c(y2));
@@ -2251,7 +2251,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             var maxDistance = options.grid.mouseActiveRadius,
                 smallestDistance = maxDistance * maxDistance + 1,
                 foundPoint = false, i, j;
-            
+
             var items = [];
             for (var i = 0; i < series.length; i++) {
                 var item = null;
@@ -2279,13 +2279,13 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                         var dx = Math.abs(axisx.p2c(x) - mouseX),
                             dy = Math.abs(axisy.p2c(y) - mouseY),
                             dist = dx * dx + dy * dy; // we save the sqrt
-                            
+
                         // if option is enabled takes max vertical distance to find points
                         if(options.xaxis.multipleSeriesEvent && dx*4 < smallestDistance) {
                             item = [i, j / ps];
                             continue;
                         }
-                            
+
                         // For points and lines, the cursor must be within a
                         // certain distance to the data point
                         if (x - mx > maxx || x - mx < -maxx ||
@@ -2319,25 +2319,25 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                                 item = [i, j / ps];
                     }
                 }
-				
+
                 if (item) {
                     u = item[1];
-                    var thisObject =  { 
+                    var thisObject =  {
                         datapoint: series[i].datapoints.points.slice(u * ps, (u + 1) * ps),
                         customData: series[i].customData ? series[i].customData.slice(u , (u + 1))[0] : null,
                         dataIndex: u,
                         series: series[i],
-                        seriesIndex: i 
+                        seriesIndex: i
                     };
 
                     items.push(thisObject);
                 }
             }
-			
+
             if (items.length) {
                 return items;
             }
-            
+
             return null;
         }
 
@@ -2363,14 +2363,14 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
             pos.pageX = event.page.x;
             pos.pageY = event.page.y;
-            
+
             // clear auto-highlights
             for (var i = 0; i < highlights.length; ++i) {
                 var h = highlights[i];
                 if (h.auto == eventname)
                     unhighlight(h.series, h.point);
             }            var items = [];
-                    
+
             var nearbyItems = findNearbyItem(canvasX, canvasY, seriesFilter);
             if (nearbyItems) {
                 items = nearbyItems;
@@ -2379,12 +2379,12 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             // when swipeline is on
             if (options.xaxis.swipeLine){
                 drawSwipeLine(
-                    canvasX, 
-                    items.length ? items[0].datapoint[0] : null, 
+                    canvasX,
+                    items.length ? items[0].datapoint[0] : null,
                     items.length ? series[items[0].seriesIndex].xaxis.max - series[items[0].seriesIndex].xaxis.min : null
                 );
             }
-            
+
             if (items) {
                 for(var thisItem = 0; thisItem < items.length; thisItem++){
                     // fill in mouse pos for any listeners out there
@@ -2392,7 +2392,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     items[thisItem].pageY = parseInt(items[thisItem].series.yaxis.p2c(items[thisItem].datapoint[1]) + offset.top + plotOffset.top);
                 }
             }
-			
+
             if (options.grid.autoHighlight) {
                 var itemsLength = items.length ? items.length : 1;
                 for(var thisItem = 0; thisItem < itemsLength; thisItem++){
@@ -2403,26 +2403,26 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             }
 
             // check if x axis is number or date to show tooltip as date, instead of timestamp
-            var timeFormatFlag = options.xaxis.timeformat != null && items != null; 
-            if(timeFormatFlag) {	
+            var timeFormatFlag = options.xaxis.timeformat != null && items != null;
+            if(timeFormatFlag) {
                 var clonedItems = [];
                 for(var thisItem = 0; thisItem < items.length; thisItem++){
                     var datedItem = Object.clone(items[thisItem]);				// clone object
                     var dateUnformated  = new Date(datedItem.datapoint[0]);
-                      
+
                     // correct Timezone
                     if (options.timeZoneCorrect){
                         dateUnformated = fixTimeZone(dateUnformated);
                     }
-                    
+
                     datedItem.datapoint[0] = flot.plot.formatDate(dateUnformated, options.xaxis.timeformat);
                     clonedItems.push(datedItem);
-                }	
+                }
             }
-            
+
             function controlArray(itm){
                 if (eventname === 'plotclick'){
-                
+
                     // get nearest point to clicked item using canvasX, canvasY
                     var positionArray = []; // [ y pos, array index ]
                     for(var m = 0; m < itm.length; m++){
@@ -2466,7 +2466,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
             executeHooks(hooks.drawOverlay, [octx]);
         }
-        
+
         function drawSwipeLine(mouseX, snapX, points){
             draw();
             var l = plotOffset.left;
@@ -2480,7 +2480,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             // avoid getting out of canvas
             if (xAxisValue < l) xAxisValue = l;
             if (xAxisValue > ctx.canvas.width + l) xAxisValue = ctx.canvas.width + l;
-            
+
             ctx.beginPath();
             ctx.lineWidth = 1;
             ctx.strokeStyle = 'grey';
@@ -2589,7 +2589,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 return gradient;
             }
         }
-		
+
         function fixTimeZone(inputDate){
             var dateDiff = inputDate.getTime() + (inputDate.getTimezoneOffset() * -60000);
             return new Date(dateDiff);
@@ -2607,7 +2607,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
 
     // returns a string with the date d formatted according to fmt
     flot.plot.formatDate = function(d, fmt, monthNames) {
-		
+
         var leftPad = function(n) {
             n = "" + n;
             return n.length == 1 ? "0" + n : n;
