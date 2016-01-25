@@ -10,7 +10,7 @@ authors:
   - @SergioCrisostomo
 
 requires:
-  - core/1.3 - 1.4: '*'
+  - core/1.3 - 1.6: '*'
   - more
   - more/utilities/color
 provides: [mooflot]
@@ -27,6 +27,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 // the color theme used for graphs
                 colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"],
                 timeZoneCorrect: true,	// correct timezone
+                retinaScaling: true,
                 legend: {
                     show: true,
                     noColumns: 1, // number of colums in legend table
@@ -701,7 +702,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                 c.height = height;
                 if (!c.getContext) // excanvas hack
                     c = window.G_vmlCanvasManager.initElement(c);
-                return c;
+                return options.retinaScaling ? retina(c) : c;
             }
 
             canvasWidth = placeholder.getSize().x || parseInt(placeholder.getStyle('width'), 10);
@@ -2666,5 +2667,18 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
     function floorInBase(n, base) {
         return base * Math.floor(n / base);
     }
+    function retina(canvas) {
+        var cctx = canvas.getContext('2d');
+        var canvasBackingScale = window.devicePixelRatio * 2;
+        var oldWidth = canvas.width;
+        var oldHeight = canvas.height;
+        canvas.width = canvasBackingScale * canvas.width;
+        canvas.height = canvasBackingScale * canvas.height;
+        canvas.style.width = oldWidth + 'px';
+        canvas.style.height = oldHeight + 'px';
+        cctx.save();
+        cctx.scale(canvasBackingScale, canvasBackingScale);
+        return canvas;
+    };
 
 })(flot);
