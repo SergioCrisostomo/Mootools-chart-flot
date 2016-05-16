@@ -709,7 +709,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             canvasHeight = placeholder.getSize().y || parseInt(placeholder.getStyle('height'), 10);
             placeholder.set('html',""); // clear placeholder
             if (placeholder.getStyle("position") == 'static')
-                placeholder.getStyle("position", "relative"); // for positioning labels and overlay
+                placeholder.setStyle("position", "relative"); // for positioning labels and overlay
 
 
             if (canvasWidth <= 0 || canvasHeight <= 0)
