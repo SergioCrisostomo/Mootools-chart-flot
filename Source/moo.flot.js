@@ -2422,20 +2422,17 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             }
 
             function controlArray(itm){
-                if (eventname === 'plotclick'){
-
-                    // get nearest point to clicked item using canvasX, canvasY
-                    var positionArray = []; // [ y pos, array index ]
-                    for(var m = 0; m < itm.length; m++){
-                        positionArray.push([Math.abs(canvasY -itm[m].pageY), m]);
-                    }
-                    positionArray = positionArray.sort(function(a, b) {
-                        return a[0] - b[0];
-                    });
-                    return itm[positionArray[0][1]];
-                }
-                if(itm.length) return itm;
-                return null;
+              if (itm.length == 0) return null;
+              if (eventname === 'plotclick') {
+                // get nearest point to clicked item using canvasX, canvasY
+                var positionArray = itm.map(function(m, i) { // [ y pos, array index ]
+                  return [Math.abs(canvasY - m.pageY), i];
+                }).sort(function(a, b){
+                  return a[0] - b[0];
+                });
+                return itm[positionArray[0][1]];
+              }
+              return itm;
             }
             var returnedItems = timeFormatFlag ? clonedItems : items;
             placeholder.fireEvent(eventname, [ event, pos, controlArray(returnedItems)]);
