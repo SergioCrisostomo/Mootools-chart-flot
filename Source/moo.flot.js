@@ -2422,6 +2422,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
             }
 
             function controlArray(itm){
+                if (itm.length == 0) return null;
                 if (eventname === 'plotclick'){
 
                     // get nearest point to clicked item using canvasX, canvasY
@@ -2434,8 +2435,7 @@ var flot = {}; //<-- we use this intead of overloading doll hair.
                     });
                     return itm[positionArray[0][1]];
                 }
-                if(itm.length) return itm;
-                return null;
+                return itm;
             }
             var returnedItems = timeFormatFlag ? clonedItems : items;
             placeholder.fireEvent(eventname, [ event, pos, controlArray(returnedItems)]);
